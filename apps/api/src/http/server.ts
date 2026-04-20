@@ -1,4 +1,5 @@
 import fastifyCors from '@fastify/cors'
+import dotenv from 'dotenv'
 import { fastify } from 'fastify'
 import {
   serializerCompiler,
@@ -7,6 +8,8 @@ import {
 } from 'fastify-type-provider-zod'
 
 import { createAccount } from './routes/auth/create-account'
+
+dotenv.config()
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
