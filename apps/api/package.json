@@ -2,7 +2,7 @@
     "name": "@saas/api",
     "version": "1.0.0",
     "scripts": {
-        "dev": "tsx watch src/http/server.ts"
+        "dev": "tsx watch --include ./src src/http/server.ts"
     },
     "dependencies": {
         "@fastify/cors": "^11.2.0",
@@ -17,6 +17,7 @@
         "zod": "^4.3.6"
     },
     "devDependencies": {
+        "@faker-js/faker": "^10.4.0",
         "@saas/eslint-config": "workspace:*",
         "@saas/prettier": "workspace:*",
         "@saas/ts-config": "workspace:*",
