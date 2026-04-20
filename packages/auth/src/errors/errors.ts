@@ -47,3 +47,50 @@ export class RolePermissionsNotFoundError extends AppError {
     })
   }
 }
+
+/**
+ * EXEMPLOS DE USO DO `cause`:
+ *
+ * 1. Capturar erro de validação (ex: Zod)
+ * ─────────────────────────────────────────
+ * try {
+ *   const schema = z.object({ email: z.string().email() })
+ *   schema.parse(data)
+ * } catch (err) {
+ *   throw new ValidationError('Invalid user data', {
+ *     email: data.email,
+ *     cause: err, // Preserve erro original do Zod
+ *   })
+ * }
+ *
+ * 2. Capturar erro de banco de dados
+ * ──────────────────────────────────
+ * try {
+ *   await db.users.findUnique({ where: { id: userId } })
+ * } catch (err) {
+ *   throw new AppError('Failed to fetch user', {
+ *     code: 'AUTH_DB_ERROR',
+ *     statusCode: 500,
+ *     details: { userId },
+ *     cause: err, // Stack trace e mensagem do Postgres/Prisma preservados
+ *   })
+ * }
+ *
+ * 3. Usar em logger/handler central
+ * ─────────────────────────────────
+ * function logError(error: unknown) {
+ *   if (error instanceof AppError) {
+ *     console.error({
+ *       message: error.message,
+ *       code: error.code,
+ *       statusCode: error.statusCode,
+ *       details: error.details,
+ *       stack: error.stack,
+ *       // Stack trace do erro original para diagnóstico real:
+ *       originalError: error.cause instanceof Error
+ *         ? { message: error.cause.message, stack: error.cause.stack }
+ *         : error.cause,
+ *     })
+ *   }
+ * }
+ */
