@@ -44,7 +44,17 @@ export async function authenticateWithPassword(app: FastifyInstance) {
         return reply.status(400).send({ message: 'invalid credentials.' })
       }
 
-      return 'Logged in successfully'
+      const tokenPayload = {
+        sub: userFromEmail.id,
+      }
+
+      const token = await reply.jwtSign(tokenPayload, {
+        sign: {
+          expiresIn: '7d',
+        },
+      })
+
+      return { token }
     },
   )
 }
