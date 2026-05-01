@@ -1,4 +1,5 @@
 import fastifyCors from '@fastify/cors'
+import fastifyJWT from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUI from '@fastify/swagger-ui'
 import dotenv from 'dotenv'
@@ -38,6 +39,10 @@ app.register(fastifySwagger, {
 
 app.register(fastifySwaggerUI, {
   routePrefix: '/docs',
+})
+
+app.register(fastifyJWT, {
+  secret: 'My JWT secret',
 })
 
 app.register(createAccount)
