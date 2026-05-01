@@ -10,6 +10,7 @@ import {
   ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 
+import { authenticateWithPassword } from './routes/auth/authenticate-with-password'
 import { createAccount } from './routes/auth/create-account'
 
 dotenv.config()
@@ -40,6 +41,7 @@ app.register(fastifySwaggerUI, {
 })
 
 app.register(createAccount)
+app.register(authenticateWithPassword)
 
 app.listen({ port: 3333 }, () => {
   console.log('Server is running on port 3333')
