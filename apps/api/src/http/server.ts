@@ -2,7 +2,7 @@ import fastifyCors from '@fastify/cors'
 import fastifyJWT from '@fastify/jwt'
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUI from '@fastify/swagger-ui'
-import dotenv from 'dotenv'
+import { env } from '@saas/env'
 import { fastify } from 'fastify'
 import {
   jsonSchemaTransform,
@@ -17,8 +17,6 @@ import { createAccount } from './routes/auth/create-account'
 import { getProfile } from './routes/auth/get-profile'
 import { requestPasswordRecover } from './routes/auth/request-password-recover'
 import { resetPassword } from './routes/auth/reset-password'
-
-dotenv.config()
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -36,7 +34,16 @@ app.register(fastifySwagger, {
       description: 'Full-stack Saas app with multi-tenant & RBAC.',
       version: '1.0.0',
     },
-    servers: [],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          description: 'JWT obtained from authentication route',
+        },
+      },
+    },
   },
   transform: jsonSchemaTransform,
 })
@@ -57,6 +64,6 @@ app.register(resetPassword)
 
 app.setErrorHandler(errorHandler)
 
-app.listen({ port: 3333 }, () => {
+app.listen({ port: env.SERVER_PORT }, () => {
   console.log('Server is running on port 3333')
 })
