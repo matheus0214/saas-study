@@ -8,9 +8,10 @@ type FastifyErrorHandler = FastifyInstance['errorHandler']
 
 export const errorHandler: FastifyErrorHandler = (error, _, reply) => {
   if (hasZodFastifySchemaValidationErrors(error)) {
+    console.error(error.validation)
     reply.status(400).send({
       message: 'Validation error.',
-      issues: error.validation.map((issue) => issue.params.issue),
+      issues: error.validation.map((issue) => issue.message),
     })
   }
 
