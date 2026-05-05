@@ -1,0 +1,9 @@
+[[language]]
+name = "typescript"
+language-servers = [ 
+  { name = "typescript-language-server", except-features = ["format"] }, 
+  "eslint" 
+]
+formatter = { command = "pnpm", args = ["exec", "prettier", "--stdin-filepath", "%{buffer_name}"] }
+auto-format = true
+
