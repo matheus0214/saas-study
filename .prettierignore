@@ -1,0 +1,14 @@
+node_modules
+dist
+build
+.turbo
+.next
+.env
+.env.local
+*.pem
+coverage
+.git
+.vscode
+.helix
+pnpm-lock.yaml
+package-lock.json
