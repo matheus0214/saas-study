@@ -105,7 +105,7 @@ export async function authenticateWithGithub(app: FastifyInstance) {
         where: {
           provider_userId: {
             provider: 'GITHUB',
-            userId: githubId,
+            userId: user.id,
           },
         },
       })
