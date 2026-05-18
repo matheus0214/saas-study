@@ -1,22 +1,59 @@
 'use server'
 
+import { HTTPError } from 'ky'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { z } from 'zod'
+
 import { signInWithPassword } from '@/http/sign-in-with-password'
 
+import type { SignInResponse } from './types'
+
+const signInSchema = z.object({
+  email: z.email('Please provide a valid email address'),
+  password: z.string('Please provide a password').min(6),
+})
+
 export async function signInWithEmailAndPassword(
-  previousState: unknown,
-  data: FormData
-) {
-  console.log('Previous state:', previousState)
-  const { email, password } = Object.fromEntries(data)
+  data: FormData,
+): Promise<SignInResponse> {
+  const result = signInSchema.safeParse(Object.fromEntries(data))
 
-  await new Promise((resolve) => setTimeout(resolve, 2000))
+  if (!result.success) {
+    const errors = result.error.issues.map((issue) => ({
+      field: issue.path.join('.'),
+      message: issue.message,
+    }))
 
-  const token = await signInWithPassword({
-    email: String(email),
-    password: String(password),
-  })
+    return { success: false, message: null, errors }
+  }
 
-  console.log(token)
+  const { email, password } = result.data
 
-  return 'success'
+  try {
+    const { token } = await signInWithPassword({
+      email,
+      password,
+    })
+
+    ;(await cookies()).set('token', token, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7,
+    })
+  } catch (error) {
+    if (error instanceof HTTPError) {
+      const { message } = error.data
+
+      return { success: false, message, errors: null }
+    }
+
+    console.error(error)
+    return {
+      success: false,
+      message: 'An unexpected error occurred, try again later',
+      errors: null,
+    }
+  }
+
+  redirect('/')
 }
