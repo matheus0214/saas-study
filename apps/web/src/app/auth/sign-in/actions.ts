@@ -7,7 +7,7 @@ import { z } from 'zod'
 
 import { signInWithPassword } from '@/http/sign-in-with-password'
 
-import type { SignInResponse } from './types'
+import type { ActionsResponse } from '../utils/get-actions-error'
 
 const signInSchema = z.object({
   email: z.email('Please provide a valid email address'),
@@ -16,7 +16,7 @@ const signInSchema = z.object({
 
 export async function signInWithEmailAndPassword(
   data: FormData,
-): Promise<SignInResponse> {
+): Promise<ActionsResponse> {
   const result = signInSchema.safeParse(Object.fromEntries(data))
 
   if (!result.success) {
@@ -41,13 +41,14 @@ export async function signInWithEmailAndPassword(
       maxAge: 60 * 60 * 24 * 7,
     })
   } catch (error) {
+    console.error(error)
+
     if (error instanceof HTTPError) {
       const { message } = error.data
 
       return { success: false, message, errors: null }
     }
 
-    console.error(error)
     return {
       success: false,
       message: 'An unexpected error occurred, try again later',
@@ -55,5 +56,5 @@ export async function signInWithEmailAndPassword(
     }
   }
 
-  redirect('/')
+  redirect('/auth/sign-in')
 }
