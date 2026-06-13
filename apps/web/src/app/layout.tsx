@@ -2,6 +2,7 @@ import './globals.css'
 
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { ThemeProvider } from 'next-themes'
 
 import { cn } from '@/lib/utils'
 
@@ -18,8 +19,20 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={cn('dark font-sans', inter.variable)}>
-      <body className={`antialiased`}>{children}</body>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn('font-sans', inter.variable)}
+    >
+      <body className={`antialiased`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   )
 }
