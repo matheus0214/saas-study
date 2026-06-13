@@ -1,13 +1,14 @@
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from './ui/dropdown-menu'
-import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar'
 import { ChevronDown, LogOut } from 'lucide-react'
 
 import { auth } from '@/auth/auth'
+
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu'
 
 function getInitials(name: string): string {
   const initials = name
