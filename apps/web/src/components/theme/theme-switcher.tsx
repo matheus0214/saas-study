@@ -19,8 +19,11 @@ export function ThemeSwitcher() {
       <DropdownMenuTrigger
         render={
           <Button variant="ghost" size="icon">
-            {resolvedTheme === 'light' && <Sun className="size-4" />}
-            {resolvedTheme === 'dark' && <Moon className="size-4" />}
+            {resolvedTheme === 'light' ? (
+              <Sun className="size-4" />
+            ) : (
+              <Moon className="size-4" />
+            )}
             <span className="sr-only">Toggle theme</span>
           </Button>
         }
