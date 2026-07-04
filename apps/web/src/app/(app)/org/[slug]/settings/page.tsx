@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-import { ShutdownOrganizationButton } from './shurdown-organization-button'
+import { ShutdownOrganizationButton } from './shutdown-organization-button'
 
 export default async function Settings() {
   const permissions = await ability()
