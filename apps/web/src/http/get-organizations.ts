@@ -10,7 +10,13 @@ type GetOrganizationsResponse = {
 }
 
 export async function getOrganizations(): Promise<GetOrganizationsResponse> {
-  const result = await api.get<GetOrganizationsResponse>('organizations').json()
+  const result = await api
+    .get<GetOrganizationsResponse>('organizations', {
+      next: {
+        tags: ['organizations'],
+      },
+    })
+    .json()
 
   return result
 }

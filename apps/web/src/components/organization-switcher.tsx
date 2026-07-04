@@ -25,7 +25,7 @@ export async function OrganizationSwitcher() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="p1 focus-visile:ring-2 focus-visile:ring-primary flex w-[168px] items-center gap-2 rounded text-sm font-medium outline-none">
+      <DropdownMenuTrigger className="p1 focus-visile:ring-2 focus-visile:ring-primary flex w-42 items-center gap-2 rounded text-sm font-medium outline-none">
         {currentOrganization ? (
           <>
             <Avatar className="size-4">
@@ -49,7 +49,7 @@ export async function OrganizationSwitcher() {
         align="end"
         alignOffset={-16}
         sideOffset={12}
-        className="w-[200px]"
+        className="w-50"
       >
         <DropdownMenuGroup>
           <DropdownMenuLabel>Organizations</DropdownMenuLabel>
