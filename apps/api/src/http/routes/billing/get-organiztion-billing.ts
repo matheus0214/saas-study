@@ -5,6 +5,7 @@ import z from 'zod'
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
 import { getUserPermissions } from '@/utils/get-user-permissions'
+
 import { UnauthorizedError } from '../_errors/unauthorized-error'
 
 export async function getOrganizationBilling(app: FastifyInstance) {
@@ -50,7 +51,7 @@ export async function getOrganizationBilling(app: FastifyInstance) {
 
         if (cannot('get', 'Billing')) {
           throw new UnauthorizedError(
-            `You're not allowed to get billing details from this organization`
+            `You're not allowed to get billing details from this organization`,
           )
         }
 
@@ -58,13 +59,13 @@ export async function getOrganizationBilling(app: FastifyInstance) {
           prisma.member.count({
             where: {
               organizationId: organization.id,
-              role: { not: 'ADMIN' },
+              role: { not: 'BILLING' },
             },
           }),
 
           prisma.project.count({
             where: {
-              organization: organization.id,
+              organizationId: organization.id,
             },
           }),
         ])
@@ -90,6 +91,6 @@ export async function getOrganizationBilling(app: FastifyInstance) {
             total: memberPrice + projectPrice,
           },
         }
-      }
+      },
     )
 }
