@@ -1,4 +1,4 @@
-import { Role } from '@saas/auth'
+import type { Role } from '@saas/auth'
 
 import { api } from './api-client'
 
@@ -14,7 +14,13 @@ type GetMembersRequest = {
 }
 
 export async function getMembers(org: string): Promise<GetMembersRequest> {
-  const result = await api.get<GetMembersRequest>(`/org/${org}/members`).json()
+  const result = await api
+    .get<GetMembersRequest>(`/org/${org}/members`, {
+      next: {
+        tags: [`${org}/members`],
+      },
+    })
+    .json()
 
   return result
 }
