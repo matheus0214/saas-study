@@ -1,14 +1,14 @@
+import { roleSchema } from '@saas/auth'
 import { FastifyInstance } from 'fastify'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import z from 'zod'
 
 import { auth } from '@/http/middlewares/auth'
 import { prisma } from '@/lib/prisma'
-
 import { getUserPermissions } from '@/utils/get-user-permissions'
-import { UnauthorizedError } from '../_errors/unauthorized-error'
-import { roleSchema } from '@saas/auth'
+
 import { BadRequestError } from '../_errors/bad-request-error'
+import { UnauthorizedError } from '../_errors/unauthorized-error'
 
 export async function createInvite(app: FastifyInstance) {
   app
@@ -45,20 +45,20 @@ export async function createInvite(app: FastifyInstance) {
 
         if (cannot('create', 'Invite')) {
           throw new UnauthorizedError(
-            `You're not allowed to create new invites.`
+            `You're not allowed to create new invites.`,
           )
         }
 
         const { email, role } = request.body
 
-        const [, domain] = email
+        const [, domain] = email.split('@')
 
         if (
           organization.shouldAttachUsersByDomain &&
           organization.domain === domain
         ) {
           throw new BadRequestError(
-            `Users with "${domain}" domain will join your organization automatically on login.`
+            `Users with "${domain}" domain will join your organization automatically on login.`,
           )
         }
 
@@ -73,7 +73,7 @@ export async function createInvite(app: FastifyInstance) {
 
         if (inviteWithSameEmail) {
           throw new BadRequestError(
-            'Another invite with same e-mail already exits.'
+            'Another invite with same e-mail already exits.',
           )
         }
 
@@ -88,7 +88,7 @@ export async function createInvite(app: FastifyInstance) {
 
         if (memberWithSameEmail) {
           throw new BadRequestError(
-            'A member with this e-mail already belongs to your organizatin.'
+            'A member with this e-mail already belongs to your organizatin.',
           )
         }
 
@@ -104,6 +104,6 @@ export async function createInvite(app: FastifyInstance) {
         return reply.status(201).send({
           inviteId: invite.id,
         })
-      }
+      },
     )
 }
