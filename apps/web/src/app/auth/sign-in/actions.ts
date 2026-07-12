@@ -5,6 +5,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
+import { acceptInvite } from '@/http/accept-invite'
 import { signInWithPassword } from '@/http/sign-in-with-password'
 
 import type { ActionsResponse } from '../utils/get-actions-error'
@@ -40,6 +41,15 @@ export async function signInWithEmailAndPassword(
       path: '/',
       maxAge: 60 * 60 * 24 * 7,
     })
+
+    const inviteId = (await cookies()).get('inviteId')?.value
+
+    if (inviteId) {
+      try {
+        await acceptInvite(inviteId)
+        ;(await cookies()).delete('inviteId')
+      } catch {}
+    }
   } catch (error) {
     console.error(error)
 
